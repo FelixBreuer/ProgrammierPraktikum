@@ -105,12 +105,12 @@ public class Main extends JFrame implements ActionListener {
     }
 
 	public static void main(String[] args) {
-	/*	javax.swing.SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				createAndShowGUI();
-			}
-		});
-		*/
+//		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+//			public void run() {
+//				createAndShowGUI();
+//			}
+//		});
+		
 		aStar aStar = new aStar();
 
 	}

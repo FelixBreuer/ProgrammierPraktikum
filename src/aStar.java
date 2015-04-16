@@ -6,9 +6,20 @@ import java.util.PriorityQueue;
 
 public class aStar{
 	
-	pathNode[] p = new pathNode[25];
+	pathNode[] p = new pathNode[100];
 	
-	pathNode target = new pathNode(5,5);
+	int[][] map = {	{1,1,1,1,1,1,1,1,1,1},
+					{1,0,0,0,0,0,0,0,0,1},
+					{1,0,1,0,1,1,0,1,9,1},
+					{1,0,1,0,0,1,0,1,1,1},
+					{1,0,1,1,0,0,0,0,1,1},
+					{1,0,0,0,0,1,1,0,1,1},
+					{1,0,1,1,0,0,1,0,0,1},
+					{1,0,1,1,1,0,1,1,0,1},
+					{1,9,0,0,0,0,0,0,0,1},
+					{1,1,1,1,1,1,1,1,1,1} };
+	
+	pathNode target = new pathNode(9,9);
 	
 	List<pathNode> pathList 	= new ArrayList<pathNode>();
 	PriorityQueue<pathNode> openList = new PriorityQueue<pathNode>(1000, new Comparator<pathNode>(){
@@ -20,24 +31,32 @@ public class aStar{
 	
 	public aStar(){
 
-		for(int i=0; i<25; i++){
-			pathList.add(p[i] = new pathNode((i%5)+1,(i/5)+1));
+		for(int i=0; i<100; i++){
+			pathList.add(p[i] = new pathNode((i%10)+1,(i/10)+1));
 			p[i].setH(distance(p[i],target));
 			p[i].walkable = true;
 			p[i].id = i;
 		}
 		
-		System.out.println(nextNode(1,this.target));
+		for(int i=0; i<10; i++){
+			for(int j=0; j<10; j++){
+				if(map[i][j] == 1){
+					p[i+j].walkable = false;
+				}
+			}
+		}
+		
+		nextNode(12,this.target);
 	}
 	
 	public int nextNode(int n, pathNode target){
 		
 		if((p[n].x == target.x) && (p[n].y == target.y))
 		{
-			return 99;
+			return -1;
 		}
 		
-		if((n-1)%5 < n%5){
+		if((n-1)%10 < n%10){
 			if(p[n-1].walkable){
 				if((p[n-1].getParent() == null) || (p[n-1].getParent().getG() > p[n].getG())){
 					p[n-1].setParent(p[n]);
@@ -46,7 +65,7 @@ public class aStar{
 				}
 			}
 		}
-		if((n+1)%5 > n%5){
+		if((n+1)%10 > n%10){
 			if(p[n+1].walkable){
 				if((p[n+1].getParent() == null) || (p[n-1].getParent().getG() > p[n].getG())){
 					p[n+1].setParent(p[n]);
@@ -55,40 +74,33 @@ public class aStar{
 				}
 			}
 		}
-		if((n-5) > 0){
-			if(p[n-5].walkable){
-				if((p[n-5].getParent() == null) || (p[n-5].getParent().getG() > p[n].getG())){
-					p[n-5].setParent(p[n]);
-					p[n-5].setG(p[n-5].getParent().getG()+10);
-					openList.add(p[n-5]);
+		if((n-10) > 0){
+			if(p[n-10].walkable){
+				if((p[n-10].getParent() == null) || (p[n-10].getParent().getG() > p[n].getG())){
+					p[n-10].setParent(p[n]);
+					p[n-10].setG(p[n-10].getParent().getG()+10);
+					openList.add(p[n-10]);
 				}
 			}
 		}
-		if((n+5) < 25 ){
-			if(p[n+5].walkable){
-				if((p[n+5].getParent() == null) || (p[n+5].getParent().getG() > p[n].getG())){
-					p[n+5].setParent(p[n]);
-					p[n+5].setG(p[n+5].getParent().getG()+10);
-					openList.add(p[n+5]);
+		if((n+10) < 100 ){
+			if(p[n+10].walkable){
+				if((p[n+10].getParent() == null) || (p[n+10].getParent().getG() > p[n].getG())){
+					p[n+10].setParent(p[n]);
+					p[n+10].setG(p[n+10].getParent().getG()+10);
+					openList.add(p[n+10]);
 				}
 			}
 		}
 		
-		return openList.remove().id;
+
+		System.out.println("Knoten: "+openList.peek().id+" "+openList.peek().getF()+" "+openList.peek().getParent().id);
 		
-//		System.out.println("P3: "+p[1].getF());
-//		System.out.println("P6: "+p[12].getF());
-//		System.out.println("P6: "+p[8].getF());
-//		System.out.println("P6: "+p[23].getF());
-//		
-//		openList.add(p[1]);
-//		openList.add(p[12]);
-//		openList.add(p[8]);
-//		openList.add(p[23]);
-				
-//		while(!openList.isEmpty()){
-//			System.out.println(openList.remove().getF());
-//		}
+		if(openList.isEmpty()){
+			return -1;
+		}
+		
+		return nextNode(openList.remove().id, target);
 	}
 	
 	

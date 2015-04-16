@@ -1,6 +1,6 @@
 
 public class pathNode {
-	public int id,x,y;
+	public int id, x, y;
 	private int h_value, g_value, f_value;
 	private pathNode parent = null;
 	public boolean walkable, closed;
