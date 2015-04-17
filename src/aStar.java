@@ -47,6 +47,10 @@ public class aStar{
 		}
 		
 		nextNode(12,this.target);
+		
+		for(pathNode k: closedList){
+			System.out.println("P"+k.id+" "+"Vorgänger:"+k.getParent().id);
+		}
 	}
 	
 	public int nextNode(int n, pathNode target){
@@ -57,7 +61,7 @@ public class aStar{
 		}
 		
 		if((n-1)%10 < n%10){
-			if(p[n-1].walkable){
+			if(p[n-1].walkable && !p[n-1].closed){
 				if((p[n-1].getParent() == null) || (p[n-1].getParent().getG() > p[n].getG())){
 					p[n-1].setParent(p[n]);
 					p[n-1].setG(p[n-1].getParent().getG()+10);
@@ -66,7 +70,7 @@ public class aStar{
 			}
 		}
 		if((n+1)%10 > n%10){
-			if(p[n+1].walkable){
+			if(p[n+1].walkable && !p[n-1].closed){
 				if((p[n+1].getParent() == null) || (p[n-1].getParent().getG() > p[n].getG())){
 					p[n+1].setParent(p[n]);
 					p[n+1].setG(p[n+1].getParent().getG()+10);
@@ -75,7 +79,7 @@ public class aStar{
 			}
 		}
 		if((n-10) > 0){
-			if(p[n-10].walkable){
+			if(p[n-10].walkable && !p[n-1].closed){
 				if((p[n-10].getParent() == null) || (p[n-10].getParent().getG() > p[n].getG())){
 					p[n-10].setParent(p[n]);
 					p[n-10].setG(p[n-10].getParent().getG()+10);
@@ -84,7 +88,7 @@ public class aStar{
 			}
 		}
 		if((n+10) < 100 ){
-			if(p[n+10].walkable){
+			if(p[n+10].walkable && !p[n-1].closed){
 				if((p[n+10].getParent() == null) || (p[n+10].getParent().getG() > p[n].getG())){
 					p[n+10].setParent(p[n]);
 					p[n+10].setG(p[n+10].getParent().getG()+10);
@@ -94,7 +98,8 @@ public class aStar{
 		}
 		
 
-		System.out.println("Knoten: "+openList.peek().id+" "+openList.peek().getF()+" "+openList.peek().getParent().id);
+		//System.out.println("Knoten: "+openList.peek().id+" "+openList.peek().getF()+" "+openList.peek().getParent().id);
+		closedList.add(openList.peek());
 		
 		if(openList.isEmpty()){
 			return -1;
